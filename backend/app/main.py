@@ -36,7 +36,7 @@ api_router.include_router(items.router, prefix="/items", tags=["items"]) # Inclu
 
 app.include_router(api_router, prefix=config.API_V1_STR) # Includes the API router; needed to access the API router.
 
-@api_router.post("/tally") # Defines a tally endpoint; needed to tally the requests.
+@app.post("/tally") # Defines a tally endpoint; needed to tally the requests.
 async def tally(json_data: dict[str, str] = Body(...)): # Defines the tally function; needed to tally the requests.
     sysp="""<SystemPrompt>
   <![CDATA[
