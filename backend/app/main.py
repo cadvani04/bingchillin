@@ -9,7 +9,8 @@ from apify_client import ApifyClient
 import time
 import openai
 import requests
-from .gmail import send_email
+import smtplib, ssl
+from email.mime.text import MIMEText
 
 app = FastAPI(title=config.APP_NAME) # Creates the app object; needed to create the app.
 load_dotenv()
@@ -20,6 +21,23 @@ app.add_middleware(
     allow_methods=["*"], # Allows all methods.
     allow_headers=["*"], # Allows all headers.
 )
+
+
+def send_email_smtp(to_email: str, body_text: str, subject: str = "Your AI Transcript Writer is Finished") -> None:
+    smtp_user = os.getenv("SMTP_USER")
+    smtp_pass = os.getenv("SMTP_PASS")
+    if not smtp_user or not smtp_pass:
+        raise RuntimeError("Missing SMTP_USER or SMTP_PASS environment variables")
+
+    message = MIMEText(body_text, "plain", "utf-8")
+    message["Subject"] = subject
+    message["From"] = smtp_user
+    message["To"] = to_email
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(smtp_user, smtp_pass)
+        server.send_message(message)
 
 
 @app.get("/health") # Defines a health check endpoint; needed to check if the app is running.
@@ -128,7 +146,12 @@ Do not add explanation, diagnostics, or anything outside the specified output st
     )
     res=(response.choices[0].message.content)
     print(res)
-    send_email(email, res)
+
+    # Send via SMTP (Gmail App Password)
+    try:
+        send_email_smtp(email, res)
+    except Exception as e:
+        print(f"SMTP send failed: {e}")
 
 
     return {"status": "ok"} # Returns a JSON response with the payload.
