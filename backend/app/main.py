@@ -124,7 +124,7 @@ Do not add explanation, diagnostics, or anything outside the specified output st
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.ChatCompletion.create(
         model="gpt-4o-mini",
-        messages=[{"role": "system", "content": sysp}, {"role": "user", "content": item["transcript"]}, {"role": "user", "content": json_data["instructions"]}]
+        messages=[{"role": "system", "content": sysp}, {"role": "user", "content": item["transcript"]}, {"role": "user", "content": instructions}]
     )
     res=(response.choices[0].message.content)
     print(res)
