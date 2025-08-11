@@ -85,8 +85,29 @@ Do not add explanation, diagnostics, or anything outside the specified output st
 </SystemPrompt>"""
 
     print(json_data) # Prints the payload.
-    url=json_data["url"]
-    print(url) # Prints the URL.
+    
+    # Extract data from Tally webhook structure
+    fields = json_data.get("data", {}).get("fields", [])
+    
+    # Find the values by looking at the labels
+    email = None
+    url = None
+    instructions = None
+    
+    for field in fields:
+        if field.get("label") == "email":
+            email = field.get("value")
+        elif field.get("label") == "video URL (tiktok, ig reel, and such)":
+            url = field.get("value")
+        elif field.get("label") == "Your Information + Who are you? (Either Summarize what you want to do with the video and who you are)":
+            instructions = field.get("value")
+    
+    if not email or not url or not instructions:
+        return {"error": "Missing required fields: email, url, or instructions"}
+    
+    print(f"Email: {email}")
+    print(f"URL: {url}")
+    print(f"Instructions: {instructions}")
     response = requests.get(url) # Sends a GET request to the URL.
     print(response.text) # Prints the response.
     # Initialize the ApifyClient with your API token
@@ -107,7 +128,7 @@ Do not add explanation, diagnostics, or anything outside the specified output st
     )
     res=(response.choices[0].message.content)
     print(res)
-    send_email(json_data["email"], res)
+    send_email(email, res)
 
 
     return {"status": "ok"} # Returns a JSON response with the payload.
