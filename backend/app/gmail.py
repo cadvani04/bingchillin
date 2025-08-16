@@ -16,12 +16,12 @@ def send_email(to_email: str, body_text: str, subject: str = "Your BingChilling 
     )
     
     service = build("gmail", "v1", credentials=creds)
-    
+
     msg = MIMEText(body_text, "plain", "utf-8")
     msg["to"] = to_email
     msg["from"] = os.getenv("GMAIL_SENDER")
     msg["subject"] = subject
-    
+
     raw = base64.urlsafe_b64encode(msg.as_bytes()).decode("utf-8")
     return service.users().messages().send(userId="me", body={"raw": raw}).execute()
 
