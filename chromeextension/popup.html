@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIGG CHILLIN</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">BIGG<br>CHILLIN</h1>
+            <p class="tagline">Transform viral videos into your content</p>
+        </div>
+        
+        <div class="form-section">
+            <div class="input-group">
+                <label for="video-url">Video URL</label>
+                <input type="text" id="video-url" placeholder="Paste TikTok, Instagram, or YouTube URL...">
+                <button id="detect-url" class="detect-btn">Auto-detect current page</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="instructions">Your Instructions</label>
+                <textarea id="instructions" placeholder="Make this about fitness, keep it motivational..."></textarea>
+            </div>
+            
+            <div class="user-section">
+                <div id="user-info" class="user-info hidden">
+                    <img id="user-avatar" class="avatar" src="" alt="User">
+                    <span id="user-email"></span>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
+                <button id="login-btn" class="login-btn">Sign in with Google</button>
+            </div>
+            
+            <button id="process-btn" class="process-btn" disabled>
+                <span class="btn-text">Process Video</span>
+                <div class="loading-spinner hidden"></div>
+            </button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Videos Scripted</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Support</span>
+            </div>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html> 
